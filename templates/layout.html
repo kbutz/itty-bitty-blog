@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="alternate" type="application/rss+xml" title="${site_title} RSS Feed" href="feed.xml" />
     <title>${title} - ${site_title}</title>
     <style>
         :root {
@@ -49,6 +50,62 @@
 
         /* Utility classes */
         .hidden { display: none; }
+
+        /* Dark Mode */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #111;
+                --text-color: #ddd;
+                --link-color: #66b3ff;
+                --meta-color: #aaa;
+                --code-bg: #222;
+                --border-color: #333;
+            }
+            img { opacity: 0.8; transition: opacity 0.3s; }
+            img:hover { opacity: 1; }
+        }
+
+        /* About Section */
+        details.about-section {
+            margin-bottom: 2rem;
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background: var(--code-bg);
+        }
+        details.about-section summary {
+            cursor: pointer;
+            font-weight: bold;
+            outline: none;
+        }
+        .about-content {
+            margin-top: 1rem;
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+        .about-avatar {
+            width: 60px;
+            height: 60px;
+            background-color: #ccc;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .about-text {
+            flex-grow: 1;
+        }
+        .about-text p {
+            margin: 0 0 0.5rem 0;
+            font-size: 0.95rem;
+        }
+        .social-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            gap: 0.8rem;
+            font-size: 0.9rem;
+        }
     </style>
 </head>
 <body>
@@ -63,6 +120,8 @@
             <a href="#" class="hidden">Resume</a>
         </nav>
     </header>
+
+    ${about_section}
 
     <main>
         ${content}

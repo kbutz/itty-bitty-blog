@@ -6,6 +6,7 @@ import sys
 import time
 from string import Template
 from datetime import datetime
+import email.utils
 
 # Configuration
 POSTS_DIR = 'posts'
@@ -13,6 +14,57 @@ TEMPLATES_DIR = 'templates'
 DIST_DIR = 'dist'
 SITE_TITLE = "My Itty Bitty Blog"
 AUTHOR_NAME = "Jules"
+SITE_URL = "https://example.com"  # Replace with actual URL
+
+def generate_rss(posts):
+    """
+    Generates an RSS 2.0 feed from the posts.
+    """
+    rss_items = []
+    for post in posts:
+        # Convert date string YYYY-MM-DD to datetime object
+        try:
+            dt = datetime.strptime(post['date'], '%Y-%m-%d')
+            pub_date = email.utils.format_datetime(dt)
+        except ValueError:
+            pub_date = email.utils.format_datetime(datetime.now())
+
+        # Create absolute URL
+        link = f"{SITE_URL}/{post['slug']}"
+
+        # Fix relative URLs in content for RSS
+        # Replace src="..." and href="..." if they don't start with http or /
+        # We assume relative links are relative to the site root for simplicity in this flat structure
+        rss_body = post['content']
+        rss_body = re.sub(r'src="(?!http|/)([^"]+)"', f'src="{SITE_URL}/\\1"', rss_body)
+        rss_body = re.sub(r'href="(?!http|/)([^"]+)"', f'href="{SITE_URL}/\\1"', rss_body)
+
+        item = f"""
+        <item>
+            <title>{post['title']}</title>
+            <link>{link}</link>
+            <guid>{link}</guid>
+            <pubDate>{pub_date}</pubDate>
+            <description><![CDATA[{rss_body}]]></description>
+        </item>
+        """
+        rss_items.append(item)
+
+    rss_content = f"""<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+<channel>
+    <title>{SITE_TITLE}</title>
+    <link>{SITE_URL}</link>
+    <description>Recent content on {SITE_TITLE}</description>
+    <language>en-us</language>
+    <lastBuildDate>{email.utils.format_datetime(datetime.now())}</lastBuildDate>
+    {''.join(rss_items)}
+</channel>
+</rss>
+"""
+    with open(os.path.join(DIST_DIR, 'feed.xml'), 'w') as f:
+        f.write(rss_content)
+    print(f"Generated feed.xml with {len(posts)} items.")
 
 def parse_markdown(text):
     """
@@ -187,6 +239,7 @@ def build():
                 'author_name': AUTHOR_NAME,
                 'year': datetime.now().year,
                 'content': f'<article>\n<header class="post-header"><h1>{title}</h1>\n<div class="post-meta">{date_str} | {category}</div></header>\n{body_html}\n</article>',
+                'about_section': '',
             }
 
             # Safe substitute to handle potential missing keys if I forget one,
@@ -210,18 +263,40 @@ def build():
 
     index_content = '<ul class="post-list">\n' + '\n'.join(index_list_items) + '\n</ul>'
 
+    # About Section Content
+    about_html = f'''
+    <details class="about-section">
+        <summary>About Me</summary>
+        <div class="about-content">
+            <div class="about-avatar"></div>
+            <div class="about-text">
+                <p>Hi, I'm {AUTHOR_NAME}. This is my micro blog where I share thoughts on technology and minimalism.</p>
+                <ul class="social-links">
+                    <li><a href="#">Twitter</a></li>
+                    <li><a href="#">GitHub</a></li>
+                    <li><a href="#">Email</a></li>
+                </ul>
+            </div>
+        </div>
+    </details>
+    '''
+
     index_context = {
         'title': "Home",
         'site_title': SITE_TITLE,
         'author_name': AUTHOR_NAME,
         'year': datetime.now().year,
-        'content': index_content
+        'content': index_content,
+        'about_section': about_html
     }
 
     index_html = layout_template.substitute(index_context)
 
     with open(os.path.join(DIST_DIR, 'index.html'), 'w') as f:
         f.write(index_html)
+
+    # Generate RSS Feed
+    generate_rss(posts)
 
     end_time = time.time()
     duration = end_time - start_time
