@@ -50,14 +50,20 @@ def parse_markdown(text):
     # 7. Lists (Unordered)
     def ul_replacer(match):
         items = match.group(0).strip().split('\n')
-        list_items = [f'<li>{re.sub(r"^[-\*]\s+", "", item).strip()}</li>' for item in items]
+        list_items = []
+        for item in items:
+            item_text = re.sub(r"^[-\*]\s+", "", item).strip()
+            list_items.append(f'<li>{item_text}</li>')
         return '\n\n<ul>' + ''.join(list_items) + '</ul>\n\n'
     text = re.sub(r'(?:^[-*] .*(?:\n|$))+', ul_replacer, text, flags=re.MULTILINE)
 
     # 8. Lists (Ordered)
     def ol_replacer(match):
         items = match.group(0).strip().split('\n')
-        list_items = [f'<li>{re.sub(r"^\d+\.\s+", "", item).strip()}</li>' for item in items]
+        list_items = []
+        for item in items:
+            item_text = re.sub(r"^\d+\.\s+", "", item).strip()
+            list_items.append(f'<li>{item_text}</li>')
         return '\n\n<ol>' + ''.join(list_items) + '</ol>\n\n'
     text = re.sub(r'(?:^\d+\. .*(?:\n|$))+', ol_replacer, text, flags=re.MULTILINE)
 
