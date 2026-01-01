@@ -44,21 +44,21 @@ def parse_markdown(text):
     # 6. Blockquotes
     def blockquote_replacer(match):
         content = match.group(0).replace('>', '').strip()
-        return f'<blockquote>{content}</blockquote>'
+        return f'\n\n<blockquote>{content}</blockquote>\n\n'
     text = re.sub(r'(?:^> .*(?:\n|$))+', blockquote_replacer, text, flags=re.MULTILINE)
 
     # 7. Lists (Unordered)
     def ul_replacer(match):
         items = match.group(0).strip().split('\n')
         list_items = [f'<li>{re.sub(r"^[-\*]\s+", "", item).strip()}</li>' for item in items]
-        return '<ul>' + ''.join(list_items) + '</ul>'
+        return '\n\n<ul>' + ''.join(list_items) + '</ul>\n\n'
     text = re.sub(r'(?:^[-*] .*(?:\n|$))+', ul_replacer, text, flags=re.MULTILINE)
 
     # 8. Lists (Ordered)
     def ol_replacer(match):
         items = match.group(0).strip().split('\n')
         list_items = [f'<li>{re.sub(r"^\d+\.\s+", "", item).strip()}</li>' for item in items]
-        return '<ol>' + ''.join(list_items) + '</ol>'
+        return '\n\n<ol>' + ''.join(list_items) + '</ol>\n\n'
     text = re.sub(r'(?:^\d+\. .*(?:\n|$))+', ol_replacer, text, flags=re.MULTILINE)
 
     # 9. Bold / Italic
