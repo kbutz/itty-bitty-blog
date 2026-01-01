@@ -15,6 +15,7 @@ DIST_DIR = 'dist'
 SITE_TITLE = "My Itty Bitty Blog"
 AUTHOR_NAME = "Jules"
 SITE_URL = "https://example.com"  # Replace with actual URL
+GITHUB_USERNAME = os.environ.get('GITHUB_USERNAME') or os.environ.get('GITHUB_REPOSITORY_OWNER')
 
 def generate_rss(posts):
     """
@@ -264,11 +265,15 @@ def build():
     index_content = '<ul class="post-list">\n' + '\n'.join(index_list_items) + '\n</ul>'
 
     # About Section Content
+    avatar_html = '<div class="about-avatar"></div>'
+    if GITHUB_USERNAME:
+        avatar_html = f'<div class="about-avatar"><img src="https://github.com/{GITHUB_USERNAME}.png" alt="{AUTHOR_NAME}"></div>'
+
     about_html = f'''
     <details class="about-section">
         <summary>About Me</summary>
         <div class="about-content">
-            <div class="about-avatar"></div>
+            {avatar_html}
             <div class="about-text">
                 <p>Hi, I'm {AUTHOR_NAME}. This is my micro blog where I share thoughts on technology and minimalism.</p>
                 <ul class="social-links">
