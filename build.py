@@ -223,6 +223,8 @@ def build():
             title = meta.get('title', 'Untitled')
             date_str = meta.get('date', datetime.now().strftime('%Y-%m-%d'))
             category = meta.get('category', 'Uncategorized')
+            tags_str = meta.get('tags', '')
+            tags = [t.strip() for t in tags_str.split(',')] if tags_str else []
 
             # Output filename
             slug = filename.replace('.md', '.html')
@@ -231,9 +233,16 @@ def build():
                 'title': title,
                 'date': date_str,
                 'category': category,
+                'tags': tags,
                 'slug': slug,
                 'content': body_html
             })
+
+            # Format tags for display
+            tags_html = ''
+            if tags:
+                tags_links = [f'<span class="tag">#{tag}</span>' for tag in tags]
+                tags_html = f'<div class="post-tags">{" ".join(tags_links)}</div>'
 
             # Context for template
             context = {
@@ -241,7 +250,7 @@ def build():
                 'site_title': SITE_TITLE,
                 'author_name': AUTHOR_NAME,
                 'year': datetime.now().year,
-                'content': f'<article>\n<header class="post-header"><h1>{title}</h1>\n<div class="post-meta">{date_str} | {category}</div></header>\n{body_html}\n</article>',
+                'content': f'<article>\n<header class="post-header"><h1>{title}</h1>\n<div class="post-meta">{date_str} | {category}</div>\n{tags_html}</header>\n{body_html}\n</article>',
                 'about_section': '',
             }
 
@@ -261,7 +270,7 @@ def build():
 
     index_list_items = []
     for post in posts:
-        item = f'<li><span>{post["date"]}</span> <div style="flex-grow:1"><a href="{post["slug"]}">{post["title"]}</a></div> <span class="category">[{post["category"]}]</span></li>'
+        item = f'<li><span>{post["date"]}</span> <div style="flex-grow:1"><a href="{post["slug"]}">{post["title"]}</a></div></li>'
         index_list_items.append(item)
 
     index_content = '<ul class="post-list">\n' + '\n'.join(index_list_items) + '\n</ul>'

@@ -1,7 +1,8 @@
 ---
 title: "Intro to itty-bitty: a tiny blog tool I built with 100% web based LLM tools"
 date: 2026-01-01
-category: Development
+category: tech
+tags: blog, llm, agent
 ---
 
 ## Intro
