@@ -9,7 +9,7 @@ tags: blog, llm, agent
 
 This is the first post on "itty-bitty," a tiny project I built to help manage the blog I want to write. The primary goal was simplicity: I wanted a tiny blog platform that is easy to use and manage, and produces static HTML for extemely low resource hosting. 
 
-While not really my intention, this whole thing was built entirely in my browser (more on that later). 
+While not really my intention, this whole thing was built entirely in my browser (more on that later). It gave me a glimpse of a looming paradigm shift: the IC as a 'mini-CTO' managing a team of agents.
 
 Right now, I'm deploying to Github pages w/ Github Actions to test everything out, but the goal is to move to a self hosted low resource microcontroller (something like a Raspberry Pi Zero) that I can power off of a solar powered battery pack, hamster wheel, or similar.
 
