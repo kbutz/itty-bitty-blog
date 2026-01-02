@@ -12,8 +12,8 @@ import email.utils
 POSTS_DIR = 'posts'
 TEMPLATES_DIR = 'templates'
 DIST_DIR = 'dist'
-SITE_TITLE = "My Itty Bitty Blog"
-AUTHOR_NAME = "Jules"
+SITE_TITLE = "Kyle Briar - itty-bitty blog"
+AUTHOR_NAME = "Kyle Briar"
 SITE_URL = "https://example.com"  # Replace with actual URL
 GITHUB_USERNAME = os.environ.get('GITHUB_USERNAME') or os.environ.get('GITHUB_REPOSITORY_OWNER')
 
@@ -275,7 +275,7 @@ def build():
         <div class="about-content">
             {avatar_html}
             <div class="about-text">
-                <p>Hi, I'm {AUTHOR_NAME}. This is my micro blog where I share thoughts on technology and minimalism.</p>
+                <p>Hi, I'm Kyle, VP of Engineering at Sezzle where as an early engineer (first 10) I hand built the Risk Platforms (Credit Underwriting, Fraud, Compliance) before growing the teams to manage and extend those platforms.</p>
                 <ul class="social-links">
                     <li><a href="#">Twitter</a></li>
                     <li><a href="#">GitHub</a></li>
