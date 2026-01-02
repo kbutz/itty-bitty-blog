@@ -270,7 +270,7 @@ def build():
         avatar_html = f'<div class="about-avatar"><img src="https://github.com/{GITHUB_USERNAME}.png" alt="{AUTHOR_NAME}"></div>'
 
     about_html = f'''
-    <details class="about-section">
+    <details class="about-section" open>
         <summary>About Me</summary>
         <div class="about-content">
             {avatar_html}
