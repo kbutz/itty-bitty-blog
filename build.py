@@ -238,19 +238,14 @@ def build():
                 'content': body_html
             })
 
-            # Format tags for display
-            tags_html = ''
-            if tags:
-                tags_links = [f'<span class="tag">#{tag}</span>' for tag in tags]
-                tags_html = f'<div class="post-tags">{" ".join(tags_links)}</div>'
-
             # Context for template
             context = {
                 'title': title,
                 'site_title': SITE_TITLE,
                 'author_name': AUTHOR_NAME,
                 'year': datetime.now().year,
-                'content': f'<article>\n<header class="post-header"><h1>{title}</h1>\n<div class="post-meta">{date_str} | {category}</div>\n{tags_html}</header>\n{body_html}\n</article>',
+                'tags': tags,
+                'content': f'<article>\n<header class="post-header"><h1>{title}</h1>\n<div class="post-meta">{date_str} | {category}</div></header>\n{body_html}\n</article>',
                 'about_section': '',
             }
 
