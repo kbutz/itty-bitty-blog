@@ -14,6 +14,8 @@ TEMPLATES_DIR = 'templates'
 DIST_DIR = 'dist'
 SITE_TITLE = "Kyle Briar - itty-bitty blog"
 AUTHOR_NAME = "Kyle Briar"
+AUTHOR_GITHUB = "https://github.com/kbutz"
+AUTHOR_EMAIL = ""
 SITE_URL = "https://example.com"  # Replace with actual URL
 GITHUB_USERNAME = os.environ.get('GITHUB_USERNAME') or os.environ.get('GITHUB_REPOSITORY_OWNER')
 
@@ -269,6 +271,16 @@ def build():
     if GITHUB_USERNAME:
         avatar_html = f'<div class="about-avatar"><img src="https://github.com/{GITHUB_USERNAME}.png" alt="{AUTHOR_NAME}"></div>'
 
+    social_links = []
+    if AUTHOR_GITHUB:
+        social_links.append(f'<li><a href="{AUTHOR_GITHUB}">GitHub</a></li>')
+    if AUTHOR_EMAIL:
+        social_links.append(f'<li><a href="mailto:{AUTHOR_EMAIL}">Email</a></li>')
+
+    social_links_html = ""
+    if social_links:
+        social_links_html = '<ul class="social-links">\n' + '\n'.join(social_links) + '\n</ul>'
+
     about_html = f'''
     <details class="about-section" open>
         <summary>About Me</summary>
@@ -276,11 +288,7 @@ def build():
             {avatar_html}
             <div class="about-text">
                 <p>Hi, I'm Kyle, VP of Engineering at Sezzle where as an early engineer (first 10) I hand built the Risk Platforms (Credit Underwriting, Fraud, Compliance) before growing the teams to manage and extend those platforms.</p>
-                <ul class="social-links">
-                    <li><a href="#">Twitter</a></li>
-                    <li><a href="#">GitHub</a></li>
-                    <li><a href="#">Email</a></li>
-                </ul>
+                {social_links_html}
             </div>
         </div>
     </details>
