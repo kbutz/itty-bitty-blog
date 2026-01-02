@@ -1,44 +1,80 @@
 ---
-title: "Hello World: My Development Journey with Gemini and Jules"
+title: "Intro to itty-bitty: a tiny blog tool I built with 100% web based LLM tools"
 date: 2026-01-01
 category: Development
 ---
 
-# Hello World: My Development Journey with Gemini and Jules
+## Intro
 
-This is the very first post on my new blog, and it's a bit meta. I'm going to detail the process of how this blog came to be, with the help of some powerful AI tools.
+This is the first post on "itty-bitty," a tiny project I built to help manage the blog I want to write. The primary goal was simplicity: I wanted a tiny blog platform that is easy to use and manage, and produces static HTML for extemely low resource hosting. 
 
-## From Idea to Implementation
+While not really my intention, this whole thing was built entirely in my browser (more on that later). 
 
-It all started with a specific need: an ultra-efficient, minimalist Static Site Generator written in Python. The goal was to have a blog that could be hosted on low-resource hardware, like a Raspberry Pi Zero. With this in mind, I used Google's Gemini to help me refine the requirements for this project and to generate a detailed prompt for an AI coding assistant called Jules.
+Right now, I'm deploying to Github pages w/ Github Actions to test everything out, but the goal is to move to a self hosted low resource microcontroller (something like a Raspberry Pi Zero) that I can power off of a solar powered battery pack, hamster wheel, or similar.
 
-Once I had the prompt, I handed it over to Jules to do the heavy lifting of the implementation. I created an empty repository on GitHub and gave Jules access to it, allowing it to open pull requests as it worked on the codebase.
+While the hardware target ultimately is a tiny device on a shelf, the development process exists entirely in the browser.
 
-## Finding the Right Workflow
+If you’re curious, the repository lives here -> https://github.com/kbutz/itty-bitty-blog
 
-As the project took shape, I evaluated various Gemini web-based editor solutions. I was looking for a tool that would allow me to make "in the driver's seat" type changes, like writing this very blog post. This led me to Firebase Studio, which provides a seamless environment for direct interaction and content creation.
+## The workflow: 100% browser-based
 
-## The Deployment Puzzle
+An unexpected but satisfying part of this project was that I haven't opened a terminal or clone a repository on my physical machine. I was able to build, manage, and deploy a custom blog engine using only web-based agents and editors. 
 
-One of my key requirements was to have a smooth deployment process using GitHub Actions. My long-term goal is to host this on a very lightweight, possibly battery or solar-powered device like a Raspberry Pi Zero or even a smaller microcontroller.
+The neat thing here is that I can push updates or write posts from any device, anywhere, without needing a local IDE. Or make edits to the blog platform on the fly from anywhere. Once you push to GH, the new static site gets build and deployed to GH Pages *like magic*.
 
-The initial approach used a legacy method that pushed built files to a separate `gh-pages` branch. This failed because my repository was looking for a build on the `main` branch, resulting in a mismatch where only the README was visible, not the actual site.
+I tried out [Jules](https://jules.google.com) for browser based agentic coding. Jules is slow, but the idea is great - clone your workspace to Google's cloud, let Gemini iterate, open a PR when it's done. It's very different than my experience with Claude Code, where the work is high quality, fast, and local. This is from Google labs, so in "experiment" mode. It doesn't feel like it will stick around longterm as a Google product, but it is a nice way to work.
 
-## A Modern Solution
+I wanted to find another web based IDE option for smaller tweaks (and also don't love editing directly in Github), so ended up on Google's [Firebase Studio](https://studio.firebase.google.com). It has a Gemini agent available, so can do its own agentic coding, and can also connect to your Github. 
 
-With a little help from Gemini, we diagnosed the issue and pivoted to the modern **GitHub Actions** deployment method.
+For brainstorming/planning, a normal part of my workflow now is chatting with Claude, ChatGPT & Gemini. At work, I would lean heavily into Claude Code for this type of conversation where we build a comprehensive project plan. At work, I would have just used Claude Code for... all of this.
 
-Instead of cluttering the repository history by committing build artifacts to a branch, we updated the `deploy.yml` to upload the build as an "artifact." We then flipped the GitHub Pages source setting to "GitHub Actions," allowing the site to deploy cleanly and directly from the workflow.
+While this is a pretty simple and trivial example, the tools and workflows available are all production grade and easily extendable to an enterprise or "real work" environment. Jules writes real code that real developers can review. You could easily configure Jules, GH Actions, Firebase Studio to deploy something more complicated to a "real" server. My output is static HTML, but the tools are all there for this same browser based workflow to build something *real*.
 
-## Iterating on the "Micro" Philosophy
+Here is how the pieces talk to each other:
 
-With the deployment pipeline fixed, I turned back to Gemini to brainstorm feature enhancements that wouldn't compromise the "itty-bitty" nature of the project. We focused on strategies to keep the file count low and the design clean while adding necessary utility.
+```text
+       [ STRATEGY & LOGIC ]             [ IMPLEMENTATION ]
+          Google Gemini  <----------->       Me (Browser)
+               ^                             |
+               | (Manual Copy/Paste)         | (Direct Edits)
+               v                             v
+          [ GitHub ] <------------------ [ Firebase Studio ]
+               ^  ^         (Commits)        (Agentic Coding)
+               |  |
+               |  +----------------------- [ Jules ]
+                            (PRs)        (Web-based Agent)
+               |
+               v
+        [ GitHub Actions ] -----------> [ Live Site ]
+```
 
-The plan now includes:
-* **RSS/Atom Feeds:** Updating the Python script to generate a `feed.xml` for subscribers.
-* **Zero-Page "About" Section:** Using HTML5 `<details>` and `<summary>` tags to embed bio info directly into the main template, avoiding the need for a separate page load.
-* **Smart Styling:** Implementing automatic Dark Mode via CSS media queries and utilizing System Fonts to avoid heavy external requests.
+* **Gemini:** Acts as the architect. I use it to brainstorm the logic, troubleshoot deployment errors, and write the prompts that I feed to the coding agents.
+* **Jules:** A web-based agent that does the heavy lifting. I give it a prompt, and it opens Pull Requests directly in GitHub.
+* **Firebase Studio:** This is my "driver's seat" editor. It has integrated Gemini features for quick agentic tweaks, but I also use it for manual content creation.
+* **GitHub:** The central hub. I handle merges and minor edits directly in the web interface.
 
-I have synthesized these requirements into a new structured prompt for Jules, ready for the next round of code implementation.
+## Quick note on the name
 
-The experience of building this blog has been a fascinating look into the power of collaborative AI development. I'm excited to see where this journey takes me, and I'll be sharing more of my thoughts and experiences here.
+**Itty-bitty** is named after a [Regal Jumping Spider](https://en.wikipedia.org/wiki/Phidippus_regius) that lived at the [Portland Insectarium](https://www.pdxinsectarium.org/), me and my daughter's *favorite* jumping spider, ever. #phidippusregius
+
+## Deployment hurdles
+
+Since itty-bitty builds static pages, they can be hosted anywhere very easily. I wanted an easy way to test this all out, so rather than going for my VPS, or working on securely hosting something from a raspberry pi on my home network right away (which is its own pandora's box of security hurdles), I knew that it would be possible to quickly and reliably host with Github pages. 
+
+I know there are some other lightweight options out there with Google Cloud that would have likely fit neatly with all of the Google based tools I was using, but hosting the pages where the source code lives sounded nice and easy.
+
+Quick Gotcha snag I hit: Initially, I tried a legacy method of pushing built files to a `gh-pages` branch for Github Pages. It was messy and only showed the README. With some troubleshooting via Gemini, I moved to a modern **GitHub Actions** workflow. Now, the site builds as an "artifact" and deploys directly from the Action, keeping the main branch clean.
+
+## A glimpse of the future
+
+What surprised me most about this project wasn’t the code I ended up with, but how the process itself felt. Working this way started to look less like a toy experiment and more like a glimpse of where larger-scale software development could be heading. The same “radical portability” that made itty-bitty convenient also removes a lot of the traditional friction around local environments, dependency management, and machine-specific setup. Instead of bringing the code to your laptop, you hand the work to an agent in its own workspace and tell it what to do next.
+
+Being browser-based isn’t just about hopping between devices—it changes the interface between you, the code, and the coding agents doing the work. That interface could just as easily live in Slack/Matrix/Teams: an agent finishes a task, asks for clarification, or opens a pull request; you respond, course-correct, and move on while it keeps working. Once the interaction looks like this, the constraints shift. You’re no longer limited by how many local repos or editor windows you can keep open, but by how clearly you can plan and communicate work.
+
+Compared to today’s local agentic workflows, that’s a meaningful change. Instead of a single repo and one or two agents running on your machine, you can spin up as many isolated workspaces as you need, review their output through pull requests, and steer them through comments and prompts.
+
+That shift is already showing up in my own day-to-day IC workflow, though local instead of cloud based. I use Claude Code as the entry point to manage a small “team” of coding agents, letting it spin up workspaces, start workers, open pull requests, and iterate based on review comments. As the agents get better, the bottleneck has moved away from writing code and toward planning and review: producing clear, specific technical prompts, and actually (carefully) reviewing the extremely high output of these systems.
+
+Taken together, this points to a fundamental shift in what the software engineer’s job looks like. More of our time moves upstream architecting systems, planning changes, and reviewing outcomes, while the act of writing code becomes increasingly mechanical - the code is the new boilerplate. The real problem-solving happens during planning and reviewing in this new paradigm. That also means the part of the job many engineers find most immersive - the artistic chance to disappear into code and build by hand - shrinks or changes shape. 
+
+The “fun” part isn’t going away, but it is changing quickly, and I worry it will be hard for folks to keep loving this job if they can’t find the “fun” in the new process.
