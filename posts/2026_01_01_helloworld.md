@@ -1,7 +1,8 @@
 ---
 title: "The Code is the New Boilerplate: Observations from building an itty-bitty blog with 100% browser-based LLM tools"
 date: 2026-01-01
-category: Development
+category: tech
+tags: blog, llm, agent
 ---
 
 ## Intro
