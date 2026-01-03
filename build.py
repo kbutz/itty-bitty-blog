@@ -81,7 +81,25 @@ def parse_markdown(text):
     code_blocks = {}
     def save_code_block(match):
         key = f"__CODEBLOCK_{len(code_blocks)}__"
-        code_blocks[key] = f'<pre><code>{match.group(1)}</code></pre>'
+        content = match.group(1)
+        # Check for language identifier (word followed by newline at start)
+        # We look for a line that contains only word characters (no spaces) immediately after ```
+        # Note: text already has HTML entities escaped, so we might see &lt; etc inside code.
+        # But language identifier should be plain text.
+
+        lang = ""
+        # The capture group (.*?) starts after ```.
+        # If there is a language, it is usually "bash\ncode...".
+        m_lang = re.match(r'^\s*([a-zA-Z0-9_-]+)\s*\n', content)
+        if m_lang:
+            lang = m_lang.group(1)
+            # Remove the language line from content
+            content = content[m_lang.end():]
+
+        if lang:
+            code_blocks[key] = f'<pre><code class="language-{lang}">{content}</code></pre>'
+        else:
+            code_blocks[key] = f'<pre><code>{content}</code></pre>'
         return key
     text = re.sub(r'```(.*?)```', save_code_block, text, flags=re.DOTALL)
     text = re.sub(r'`(.*?)`', r'<code>\1</code>', text)
@@ -107,10 +125,12 @@ def parse_markdown(text):
         items = match.group(0).strip().split('\n')
         list_items = []
         for item in items:
-            item_text = re.sub(r"^[-\*]\s+", "", item).strip()
+            # Allow for indented items (flattening them for now)
+            item_text = re.sub(r"^\s*[-\*]\s+", "", item).strip()
             list_items.append(f'<li>{item_text}</li>')
         return '\n\n<ul>' + ''.join(list_items) + '</ul>\n\n'
-    text = re.sub(r'(?:^[-*] .*(?:\n|$))+', ul_replacer, text, flags=re.MULTILINE)
+    # Modified regex to allow whitespace at start of line
+    text = re.sub(r'(?:^\s*[-*] .*(?:\n|$))+', ul_replacer, text, flags=re.MULTILINE)
 
     # 8. Lists (Ordered)
     def ol_replacer(match):
@@ -178,7 +198,11 @@ def parse_frontmatter(content):
             for line in frontmatter.strip().split('\n'):
                 if ':' in line:
                     key, value = line.split(':', 1)
-                    meta[key.strip()] = value.strip()
+                    value = value.strip()
+                    # Strip quotes if present
+                    if (value.startswith('"') and value.endswith('"')) or (value.startswith("'") and value.endswith("'")):
+                        value = value[1:-1]
+                    meta[key.strip()] = value
     return meta, body.strip()
 
 def build():
@@ -224,6 +248,9 @@ def build():
             date_str = meta.get('date', datetime.now().strftime('%Y-%m-%d'))
             category = meta.get('category', 'Uncategorized')
             tags_str = meta.get('tags', '')
+            # Handle list syntax [a, b]
+            if tags_str.startswith('[') and tags_str.endswith(']'):
+                tags_str = tags_str[1:-1]
             tags = [t.strip() for t in tags_str.split(',')] if tags_str else []
 
             # Output filename
