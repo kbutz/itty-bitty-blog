@@ -15,7 +15,7 @@ Right now, I'm deploying to Github pages w/ Github Actions to test everything ou
 
 While the hardware target ultimately is a tiny device on a shelf, the development process exists entirely in the browser.
 
-If you’re curious, the repository lives here -> https://github.com/kbutz/itty-bitty-blog
+If you’re curious, the repository lives [here](https://github.com/kbutz/itty-bitty-blog)
 
 ## The workflow: 100% browser-based
 
