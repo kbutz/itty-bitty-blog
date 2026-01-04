@@ -1,6 +1,7 @@
 ---
 title: "Down the Rabbit Hole: Coding in the Cloud, From the Cloud"
 date: 2026-01-03
+category: tech
 tags: [coding-agents, google-cloud, devops, rabbit-hole]
 ---
 
