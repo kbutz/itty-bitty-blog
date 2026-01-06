@@ -5,12 +5,12 @@ category: tech
 tags: ai, monitoring, code-review
 ---
 
-This post is about things that I haven't been able to get AI to do for me in 2025.
+This post covers the tasks I still haven't been able to offload to AI in 2025.
 
-I have not been able to get AI to monitor a code changes deployment. This means that when I deploy, I'm out of there HTTP dashboards for regressions on the route and HTTP status level, I may monitor logs for a general unexpected regression monitoring, and often I will have already built specific Loki or Prometheus queries to monitor specific changes or for a specific regressions I'm worried about. This would also include monitoring data lake for data behavior changes after a deployment.
+Deployment Monitoring I still cannot get AI to effectively monitor code deployment changes. When I deploy, I am the one watching HTTP dashboards for route regressions and status code spikes. While I monitor logs for general anomalies, I usually have to build specific Loki or Prometheus queries beforehand to catch specific regressions I'm worried about. This manual oversight also extends to monitoring the data lake for behavioral changes in the data post-deployment.
 
-Another thing I haven't been satisfied with AI's job in 2025 so far is code review. While I have had satisfactory luck having my own AI agents help enforce coding standards and some best practices, the real code review which enforces domain knowledge and catches domain or logic bugs that are more complicated any no pointer have been exclusively the domain of human reviewers.
+Deep Code Review I haven't been satisfied with AI code reviews this year. While I’ve had luck using agents to enforce coding standards and best practices, "real" code review remains a human task. Enforcing domain knowledge and catching logic bugs that are more complex than a null pointer exception are still exclusively the domain of human reviewers.
 
-Solving complex open-ended problems that span multiple services has been somewhat possible with cloud code, but still when dealing with ambiguous bugs that's been one or more front ends and one or more back ends, has also remained the domain of a human reviewer.
+Cross-Service Debugging Solving complex, open-ended problems that span multiple services is still a hurdle. While tools like Cloud Code help, debugging ambiguous issues that involve multiple front ends and back ends requires a human context that AI still lacks.
 
-I'll probably have more to come but we can start with this.
+I'll probably add to this list later, but this marks some of the big gaps for me in 2025!
