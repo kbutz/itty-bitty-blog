@@ -247,7 +247,9 @@ def build():
             title = meta.get('title', 'Untitled')
             date_str = meta.get('date', datetime.now().strftime('%Y-%m-%d'))
             category = meta.get('category', 'Uncategorized')
+            post_type = meta.get('type', 'blog')
             tags_str = meta.get('tags', '')
+            book_author = meta.get('book_author', '')
             # Handle list syntax [a, b]
             if tags_str.startswith('[') and tags_str.endswith(']'):
                 tags_str = tags_str[1:-1]
@@ -260,7 +262,9 @@ def build():
                 'title': title,
                 'date': date_str,
                 'category': category,
+                'type': post_type,
                 'tags': tags,
+                'book_author': book_author,
                 'slug': slug,
                 'content': body_html
             })
@@ -289,8 +293,11 @@ def build():
     # Generate Index
     posts.sort(key=lambda x: x['date'], reverse=True)
 
+    blog_posts = [p for p in posts if p.get('type') == 'blog']
+    book_posts = [p for p in posts if p.get('type') == 'book']
+
     index_list_items = []
-    for post in posts:
+    for post in blog_posts:
         item = f'<li><span>{post["date"]}</span> <div style="flex-grow:1"><a href="{post["slug"]}">{post["title"]}</a></div></li>'
         index_list_items.append(item)
 
@@ -337,6 +344,28 @@ def build():
 
     with open(os.path.join(DIST_DIR, 'index.html'), 'w') as f:
         f.write(index_html)
+
+    # Generate Books Page
+    book_list_items = []
+    for post in book_posts:
+        author_display = f" by {post['book_author']}" if post['book_author'] else ""
+        item = f'<li><span>{post["date"]}</span> <div style="flex-grow:1"><a href="{post["slug"]}">{post["title"]}</a>{author_display}</div></li>'
+        book_list_items.append(item)
+
+    books_content = '<h1>Books I Read</h1>\n<ul class="post-list">\n' + '\n'.join(book_list_items) + '\n</ul>'
+
+    books_context = {
+        'title': "Books I Read",
+        'site_title': SITE_TITLE,
+        'author_name': AUTHOR_NAME,
+        'year': datetime.now().year,
+        'content': books_content,
+        'about_section': ''
+    }
+
+    books_html = layout_template.substitute(books_context)
+    with open(os.path.join(DIST_DIR, 'books.html'), 'w') as f:
+        f.write(books_html)
 
     # Generate RSS Feed
     generate_rss(posts)
