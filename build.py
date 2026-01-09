@@ -247,6 +247,7 @@ def build():
             title = meta.get('title', 'Untitled')
             date_str = meta.get('date', datetime.now().strftime('%Y-%m-%d'))
             category = meta.get('category', 'Uncategorized')
+            post_type = meta.get('type', 'blog')
             tags_str = meta.get('tags', '')
             book_author = meta.get('book_author', '')
             # Handle list syntax [a, b]
@@ -261,6 +262,7 @@ def build():
                 'title': title,
                 'date': date_str,
                 'category': category,
+                'type': post_type,
                 'tags': tags,
                 'book_author': book_author,
                 'slug': slug,
@@ -291,8 +293,8 @@ def build():
     # Generate Index
     posts.sort(key=lambda x: x['date'], reverse=True)
 
-    blog_posts = [p for p in posts if 'book' not in p['tags']]
-    book_posts = [p for p in posts if 'book' in p['tags']]
+    blog_posts = [p for p in posts if p.get('type') == 'blog']
+    book_posts = [p for p in posts if p.get('type') == 'book']
 
     index_list_items = []
     for post in blog_posts:
