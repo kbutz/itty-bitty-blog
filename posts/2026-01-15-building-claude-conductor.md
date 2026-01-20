@@ -7,17 +7,21 @@ tags: [ai, claude-code, python, engineering, orchestration]
 
 # Building Claude Conductor: Orchestrating an AI Engineering Team
 
-*How we built a system to manage multiple AI coding agents working in parallel across our codebase*
+*How I built a system to manage multiple AI coding agents working in parallel across our codebase*
 
 ---
 
 ## The Challenge: Scaling AI-Assisted Development
 
-We've been using Claude Code (Anthropic's CLI tool for AI-assisted coding) to accelerate our development workflow. It's powerful - a single Claude instance can debug issues, implement features, write tests, and create merge requests autonomously. But we hit a bottleneck: **Claude Code works on one task at a time**.
+At work, we've been using Claude Code (Anthropic's CLI tool for AI-assisted coding) to accelerate our development workflow. It's powerful - a single Claude instance can debug issues, implement features, write tests, and create merge requests autonomously. But we hit a bottleneck: **Claude Code works on one task at a time**. 
+
+OK, not really a bottle-neck: the simple solution is you just launch more terminal tabs/windows, a new window for each project. But this gets kind of difficult to manage. Which tab was Ticket #10 on? Wait, Ticket #11 has code review comments now, hold on Ticket #12 needs to run the frontend for a manual test now.
 
 When you have a backlog of 20 tickets ready to be tackled, why should your AI assistant work sequentially when it could work in parallel?
 
-That's the problem Claude Conductor solves.
+That's the problem Claude Conductor solves. Like Jira is used for project management, claude-conductor is used for agent management managing the complete task lifecycle, from creating a new branch, to opening the Pull Request, to responding to code review comments on that Pull Request.
+
+So instead of opening new Claude Code tabs, now I ask claude code to add a task the claude-conductor!
 
 ## What is Claude Conductor?
 
@@ -64,11 +68,7 @@ Claude Conductor is a multi-agent orchestration system that spawns and manages m
 
 ### Workspace Isolation
 
-Each workspace is a complete Git clone of all configured repositories:
-- backend-api
-- integration-service
-- mobile-app
-- admin-dashboard
+Each workspace is a complete Git clone of all configured repositories. The repositories you manage in a "workspace" is configurable, just specify where to clone them and how to set them up, claude + claude-conductor does the rest.
 
 When an agent starts a task, it gets assigned to a workspace, creates a feature branch, and works independently. After completing the work, the workspace transitions through states:
 
@@ -168,7 +168,7 @@ Recent enhancements focused on reliability and developer experience:
 
 ### Typical Workflow
 
-**Morning:** I have 10 tickets ready to implement. I submit them all:
+**Morning:** I have 10 tickets ready to implement. I ask Claude Code to submit them all:
 
 ```bash
 conductor submit -t "TASK-123: Implement memory management" \
@@ -286,92 +286,6 @@ Despite automation, humans are essential for:
 
 Claude Conductor accelerates development but doesn't replace engineering judgment.
 
-## The Tech Stack
-
-**Core:**
-- Python 3.10+
-- SQLAlchemy (ORM for SQLite)
-- Click (CLI framework)
-- Textual (Terminal UI)
-- GitPython (Git operations)
-
-**Testing:**
-- pytest (unit and integration tests)
-- unittest.mock (for mocking Claude Code)
-- pytest-cov (coverage reporting)
-
-**Infrastructure:**
-- GitLab (version control, MR workflow)
-- GitLab MCP (MR automation via Claude)
-- 1Password CLI for secret management
-
-**Claude Integration:**
-- Claude Code CLI (the agents themselves)
-- `--print` mode for non-interactive execution
-- `--dangerously-skip-permissions` for autonomous operation
-
-## Challenges and Solutions
-
-### Challenge 1: SSH Key Management
-
-**Problem:** Git operations in workspaces needed SSH authentication.
-
-**Solution:** Configure SSH agent to use keychain on macOS, ensuring SSH keys are available to all spawned processes without requiring manual password entry.
-
-### Challenge 2: Detecting Agent Completion
-
-**Problem:** How do we know when a Claude Code agent has finished?
-
-**Solution:** Monitor the process via PID and check exit codes. Additionally, implement heartbeat detection - if no file changes in workspace for 5 minutes, agent may be stuck.
-
-### Challenge 3: Preventing Duplicate MRs
-
-**Problem:** When retrying failed tasks, agents sometimes created duplicate MRs.
-
-**Solution:** Before creating MR, check GitLab API for existing MR on that branch. If found, reuse it instead of creating a new one.
-
-### Challenge 4: Multi-Repo Test Coordination
-
-**Problem:** In multi-repo tasks, should we wait for all repos to finish tests before pushing any?
-
-**Solution:** Push each repo independently as soon as its tests pass. Create MRs with cross-references to related changes. This allows partial success and faster feedback.
-
-## Future Roadmap
-
-**Short-term:**
-- Automatic test fix retry (agent attempts to fix test failures N times)
-- Slack notifications for task completion and failures
-- Cost tracking (monitor Claude API usage per task)
-- Workspace auto-scaling based on queue depth
-
-**Medium-term:**
-- Smarter task assignment (analyze code to determine which repos need changes)
-- Integration test coordination across repos
-- Automatic MR merging for trusted task types
-- Agent specialization (different agents for different types of work)
-
-**Long-term:**
-- Self-improvement loop (agent learns from MR feedback)
-- Cross-task dependency detection
-- Predictive resource allocation
-- Automatic rollback on production issues
-
-## Open Questions
-
-1. **How many concurrent agents is optimal?** We've tested up to 5. Beyond that, GitLab API rate limits become an issue.
-
-2. **Should agents collaborate on complex tasks?** Currently each agent works independently. Could multi-agent collaboration improve quality?
-
-3. **How do we measure agent effectiveness?** Current metrics: MR merge rate, test pass rate, code review comments. What else matters?
-
-4. **Can we predict task difficulty?** Some tasks complete in 2 minutes, others take 30+ minutes. Could we estimate duration based on prompt complexity?
-
-## Conclusion
-
-Claude Conductor has fundamentally changed how we approach engineering work. What used to take days (implementing 10 features sequentially) now takes hours (implementing them in parallel).
-
-The system isn't perfect - it requires oversight, occasional manual fixes, and careful prompt engineering. But it's a force multiplier for our engineering team.
-
 **Key takeaways:**
 - AI coding agents can work in parallel with proper orchestration
 - Quality gates (automated testing) are essential for autonomous systems
@@ -479,23 +393,4 @@ work_assignment:
   require_approval: true
 ```
 
----
 
-## Getting Started
-
-If you want to build something similar:
-
-1. **Start simple**: Single agent, single workspace, manual task submission
-2. **Add quality gates early**: Test verification is critical before scaling
-3. **Invest in observability**: Logging and monitoring pay dividends
-4. **Design for reuse**: Workspace pooling dramatically improves performance
-5. **Iterate on the UI**: A good monitoring interface makes the system usable
-
-The core orchestration logic is only ~500 lines of Python. The complexity comes from edge cases, error handling, and polish.
-
----
-
-**Date:** January 2026
-**System Status:** Production-Ready
-**Codebase:** ~8,000 lines of Python
-**License:** Internal tool, architecture/patterns shared publicly
