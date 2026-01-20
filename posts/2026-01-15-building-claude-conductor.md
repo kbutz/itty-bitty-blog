@@ -13,15 +13,15 @@ tags: [ai, claude-code, python, engineering, orchestration]
 
 ## The Challenge: Scaling AI-Assisted Development
 
-At work, we've been using Claude Code (Anthropic's CLI tool for AI-assisted coding) to accelerate our development workflow. It's powerful - a single Claude instance can debug issues, implement features, write tests, and create merge requests autonomously. But we hit a bottleneck: **Claude Code works on one task at a time**. 
+At work, we've been using Claude Code (Anthropic's CLI tool for AI-assisted coding) to accelerate our development workflow. It's powerful - a single Claude instance can debug issues, implement features, write tests, and create pull requests autonomously. But we hit a bottleneck: **Claude Code works on one task at a time**.
 
-OK, not really a bottle-neck: the simple solution is you just launch more terminal tabs/windows, a new window for each project. But this gets kind of difficult to manage. Which tab was Ticket #10 on? Wait, Ticket #11 has code review comments now, hold on Ticket #12 needs to run the frontend for a manual test now.
+Technically, this isn't a hard limit—you can simply open multiple terminal tabs. However, the cognitive load of context-switching between 10 different active agent sessions creates a new management bottleneck. I found myself losing track of which tab was handling which ticket, or which agent was waiting for input versus which was running tests.
 
 When you have a backlog of 20 tickets ready to be tackled, why should your AI assistant work sequentially when it could work in parallel?
 
-That's the problem Claude Conductor solves. Like Jira is used for project management, claude-conductor is used for agent management managing the complete task lifecycle, from creating a new branch, to opening the Pull Request, to responding to code review comments on that Pull Request.
+That's the problem Claude Conductor solves. Like Jira is used for project management, claude-conductor is used for agent management, handling the complete task lifecycle from creating a new branch to opening the Pull Request and responding to code review comments.
 
-So instead of opening new Claude Code tabs, now I ask claude code to add a task the claude-conductor!
+Most importantly, Claude Conductor decouples the *agent* from the *terminal window*. I no longer manage individual sessions; I treat `conductor` as a tool that my primary Claude Code instance uses to spin up and manage sub-agents.
 
 ## What is Claude Conductor?
 
@@ -29,7 +29,7 @@ Claude Conductor is a multi-agent orchestration system that spawns and manages m
 
 **Key capabilities:**
 - Spawns multiple Claude Code agents working simultaneously on different tasks
-- Manages isolated Git workspaces for each agent (separate branches, commits, MRs)
+- Manages isolated Git workspaces for each agent (separate branches, commits, PRs)
 - Runs automated tests before allowing code to be pushed
 - Provides real-time monitoring via terminal UI
 - Handles code review comments and iterative feedback
@@ -40,23 +40,27 @@ Claude Conductor is a multi-agent orchestration system that spawns and manages m
 
 ### The Core Components
 
+The system creates a hierarchy where I interface with a "Principal Agent," which then controls the Orchestrator.
+
 ```
 ┌─────────────────┐
-│   Terminal UI   │  ← Live task monitoring
-│   (Textual)     │
+│      User       │
 └────────┬────────┘
-         │
-    ┌────┴────────────────┐
-    │   Orchestrator      │  ← Main event loop
-    │  - Task Queue       │
-    │  - Agent Pool       │
-    │  - Workspace Pool   │
+         │ (Natural Language)
+┌────────▼─────────┐
+│ Principal Agent  │  ← My main Claude Code instance
+│   (Tool User)    │
+└────────┬─────────┘
+         │ (CLI Commands)
+    ┌────▼────────────────┐
+    │    Orchestrator     │  ← Main event loop & Agent Pool
+    │   (The Conductor)   │
     └────┬────────────────┘
          │
     ┌────┴─────────────────────┐
     │                          │
 ┌───┴────┐  ┌─────────┐  ┌────┴────┐
-│ Agent  │  │ Agent   │  │ Agent   │  ← Claude Code processes
+│ Agent  │  │ Agent   │  │ Agent   │  ← Sub-agent processes
 │   #1   │  │   #2    │  │   #3    │
 └───┬────┘  └────┬────┘  └────┬────┘
     │            │            │
@@ -68,17 +72,17 @@ Claude Conductor is a multi-agent orchestration system that spawns and manages m
 
 ### Workspace Isolation
 
-Each workspace is a complete Git clone of all configured repositories. The repositories you manage in a "workspace" is configurable, just specify where to clone them and how to set them up, claude + claude-conductor does the rest.
+Each workspace is a complete Git clone of all configured repositories. The repositories you manage in a "workspace" are configurable—just specify where to clone them and how to set them up, and the system handles the rest.
 
 When an agent starts a task, it gets assigned to a workspace, creates a feature branch, and works independently. After completing the work, the workspace transitions through states:
 
 ```
 FREE → IN_USE → FIXING_TESTS → UNDER_REVIEW → FREE (after merge)
-                      ↓
+                    ↓
                 BLOCKED (if tests fail)
 ```
 
-Workspaces are **reused** - after an MR is merged, the workspace resets to the default branch and becomes available for the next task.
+Workspaces are **reused** - after a PR is merged, the workspace resets to the default branch and becomes available for the next task.
 
 ### The Orchestration Loop
 
@@ -92,12 +96,12 @@ The orchestrator runs continuously, performing these actions:
 6. **Run post-processing**:
    - Automatically detect and run relevant tests
    - Push branch only if tests pass
-   - Create GitLab merge request
-   - Store MR URL in database
-7. **Handle review comments** when MR gets feedback
-8. **Free workspace** when MR is merged
+   - Create new pull request (if needed)
+   - Store PR URL in database
+7. **Handle review comments** when PR gets feedback
+8. **Free workspace** when PR is merged
 
-All of this happens **automatically** - the system can run unattended for hours, working through your task queue.
+All of this happens **automatically** - the system can run unattended for hours, working through the task queue.
 
 ## Building It: The Journey
 
@@ -114,7 +118,7 @@ The first working version could:
 - Create a workspace
 - Spawn Claude Code in `--print` mode (non-interactive)
 - Detect when the agent finished
-- Create a merge request
+- Create a pull request
 
 **Lines of code at this stage:** ~2,000
 
@@ -139,13 +143,13 @@ A common pattern in microservice architectures: a single feature requires change
 
 We extended the system to support **multi-repo tasks**:
 - Submit a task with multiple target repositories
-- Spawn **one agent per repository** (running concurrently in the same workspace)
+- Spawn **one agent per repository** (running concurrently in the same workspace directory)
 - Track per-repo status in `TaskRepository` table
-- Create separate MRs for each repository
+- Create separate PRs for each repository
 - Handle partial success (some repos pass, others fail)
 
 This was architecturally challenging. We introduced:
-- **Repo-level locking** instead of workspace-level (workspace can have multiple agents)
+- **Repo-level locking** within a shared workspace (allowing distinct agents to work on distinct repositories simultaneously)
 - **Tuple-based agent keys**: `(task_id, repo_name)` instead of just `task_id`
 - **Repository routing** for review comments and feedback
 - **Multi-line UI display** in the terminal monitor
@@ -158,43 +162,38 @@ Recent enhancements focused on reliability and developer experience:
 
 - **Event logging** throughout the pipeline for observability
 - **Test fix retry workflow** (agent attempts to fix test failures automatically)
-- **MR existence check** to avoid duplicate MR creation on retries
+- **PR existence check** to avoid duplicate PR creation on retries
 - **Enhanced terminal UI** with filtering, sorting, and multi-repo display
 - **Configurable test execution** per repository
-- **Direct feedback system** for conversational iteration without GitLab MR comments
+- **Direct feedback system** for conversational iteration without PR comments
 - **Comprehensive test coverage** (unit + integration tests)
 
 ## Real-World Usage
 
 ### Typical Workflow
 
-**Morning:** I have 10 tickets ready to implement. I ask Claude Code to submit them all:
+Instead of manually creating branches or typing CLI commands, I paste the ticket details into my primary Claude Code instance (my "Principal Agent") and give it access to the `conductor` tool.
 
+**Morning:** I have 10 tickets ready to implement.
+
+**Me:** "Here are the top 3 tickets for this sprint. Please use the conductor to start work on them. Prioritize the memory management task."
+
+**Claude Code (Principal Instance):**
+*Analyzes request and executes tool calls:*
 ```bash
 conductor submit -t "TASK-123: Implement memory management" \
   -p "Add memory pooling with configurable limits..." \
   --jira TASK-123 --repo backend-api --priority High
-
-conductor submit -t "TASK-124: Add rate limiting middleware" \
-  -p "Implement token bucket algorithm with Redis..." \
-  --jira TASK-124 --repo backend-api --priority High
-
-conductor submit -t "TASK-125: Update authentication flow" \
-  -p "Switch from JWT to session-based auth..." \
-  --repos backend-api --repos mobile-app --priority Medium
-
-# ... 7 more tasks
 ```
-
-**Approval and priority:**
 ```bash
-conductor approve 1
-conductor approve 2
-# ...
-conductor reorder 1 3 5 2 4  # Set execution order
+conductor submit -t "TASK-124: Add rate limiting middleware" \
+  --jira TASK-124 --repo backend-api --priority High
 ```
+
+I act as the strategic lead, while my primary Claude instance handles the tactical dispatching to the `conductor` system.
 
 **Start monitoring:**
+I open a separate window to watch the team work.
 ```bash
 conductor monitor  # Terminal UI with live updates
 ```
@@ -203,13 +202,13 @@ conductor monitor  # Terminal UI with live updates
 - Task 1 starts in workspace-1
 - Completes in 3 minutes
 - Tests run automatically (pass ✓)
-- Branch pushed, MR created
+- Branch pushed, PR created
 - Task transitions to UNDER_REVIEW
 - Task 2 auto-starts in workspace-1 (reused)
 
 **Handle failures gracefully:**
 
-If tests fail:
+If tests fail, I can ask the Principal Agent to investigate, or intervene manually:
 ```bash
 conductor task 5  # View test failure output
 cd ~/workspaces/workspace-2/backend-api
@@ -219,17 +218,17 @@ conductor unblock 5  # Retries tests, pushes if pass
 
 **Code review iteration:**
 
-When MR has comments:
+When PR has comments, I tell the Principal Agent: "Address the feedback on Task 3."
 ```bash
 conductor review-comments 3
-# Agent automatically:
-# - Fetches MR discussions
+# Sub-agent automatically:
+# - Fetches PR discussions
 # - Makes requested changes
 # - Commits and pushes
 # - Replies to each comment
 ```
 
-**Results:** By end of day, 8 of 10 tasks have MRs under review. 2 needed manual fixes. All changes properly tested before push.
+**Results:** By end of day, 8 of 10 tasks have PRs under review. 2 needed manual fixes. All changes properly tested before push.
 
 ### Statistics (First Month)
 
@@ -250,7 +249,7 @@ Early versions would push anything Claude generated. Adding automatic test verif
 - Import errors or typos
 - Test data mismatches
 
-The quality gate catches these before they pollute the MR.
+The quality gate catches these before they pollute the PR.
 
 ### 2. Observability is Essential
 
@@ -258,7 +257,7 @@ We added extensive event logging:
 - Agent lifecycle events (start, complete, error)
 - Git operations (branch create, commit, push)
 - Test results (pass/fail with output)
-- MR creation (URL, status)
+- PR creation (URL, status)
 
 This makes debugging failures straightforward. The terminal UI and database events provide complete visibility.
 
@@ -279,7 +278,7 @@ But the payoff is huge: one task can now update backend, frontend, and mobile si
 ### 5. Humans Still Matter
 
 Despite automation, humans are essential for:
-- Reviewing MRs (Claude can make architectural mistakes)
+- Reviewing PRs (Claude can make architectural mistakes)
 - Handling edge cases (complex merge conflicts)
 - Making judgment calls (security implications, performance trade-offs)
 - Approving tasks before assignment (quality control on prompts)
@@ -295,7 +294,7 @@ Claude Conductor accelerates development but doesn't replace engineering judgmen
 
 The patterns and architecture are broadly applicable to any team using Claude Code (or similar AI coding tools) at scale.
 
-**The future of software development isn't replacing engineers with AI - it's empowering engineers to work at 10x velocity by orchestrating AI teammates.**
+**My experience building and using Claude Conductor suggests that the role of the senior engineer is shifting from writing code to designing systems that generate code. We aren't just typing faster; we are managing a synthetic team.**
 
 ---
 
@@ -392,5 +391,3 @@ work_assignment:
   mode: "hybrid"  # Require approval before starting
   require_approval: true
 ```
-
-
