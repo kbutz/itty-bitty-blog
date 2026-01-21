@@ -114,6 +114,9 @@ def parse_markdown(text):
     for i in range(6, 0, -1):
         text = re.sub(r'^' + '#' * i + r'\s+(.*$)', r'<h' + str(i) + r'>\1</h' + str(i) + r'>', text, flags=re.MULTILINE)
 
+    # Horizontal Rules
+    text = re.sub(r'^---+$', r'<hr>', text, flags=re.MULTILINE)
+
     # 6. Blockquotes
     def blockquote_replacer(match):
         content = match.group(0).replace('>', '').strip()
@@ -149,7 +152,7 @@ def parse_markdown(text):
     # 10. Paragraphs
     # Split by double newline.
     # If a block is not wrapped in a block tag, wrap it in <p>.
-    block_tags = ['<h', '<ul', '<ol', '<pre', '<block', '<li', '<img']
+    block_tags = ['<h', '<ul', '<ol', '<pre', '<block', '<li', '<img', '<hr']
 
     lines = text.split('\n\n')
     new_lines = []
