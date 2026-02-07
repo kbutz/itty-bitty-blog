@@ -93,5 +93,37 @@ Book content.""")
             self.assertIn('Author Name', books_content)
             self.assertNotIn('Blog Post', books_content)
 
+    def test_build_tunes(self):
+        # Create a tune post
+        with open(os.path.join(self.posts_dir, 'test_tune.md'), 'w') as f:
+            f.write("""---
+title: Tune Post
+date: 2023-01-03
+type: tune
+---
+Tune content.
+![Score](images/score.png)""")
+
+        # Create images directory and dummy image
+        os.makedirs(os.path.join(self.posts_dir, 'images'))
+        with open(os.path.join(self.posts_dir, 'images', 'score.png'), 'w') as f:
+            f.write("image data")
+
+        # Run build
+        build_module.build()
+
+        # Check if tunes.html contains tune post
+        with open(os.path.join(self.dist_dir, 'tunes.html'), 'r') as f:
+            tunes_content = f.read()
+            self.assertIn('Tune Post', tunes_content)
+
+        # Check if index.html does NOT contain tune post
+        with open(os.path.join(self.dist_dir, 'index.html'), 'r') as f:
+            index_content = f.read()
+            self.assertNotIn('Tune Post', index_content)
+
+        # Check if image was copied
+        self.assertTrue(os.path.exists(os.path.join(self.dist_dir, 'images', 'score.png')))
+
 if __name__ == '__main__':
     unittest.main()

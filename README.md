@@ -39,9 +39,19 @@ python3 --version
         *   Lists (`-` for unordered, `1.` for ordered)
         *   Bold (`**text**`) and Italic (`*text*`)
         *   Links (`[text](url)`)
-        *   Images (`![alt](url)`)
+        *   Images (`![alt](images/filename.ext)`)
         *   Code blocks (` ``` `)
         *   Blockquotes (`>`)
+
+    *   **Post Types**:
+        *   `type: blog` (default) - Appears on the homepage.
+        *   `type: book` - Appears on the "Books" page.
+        *   `type: tune` - Appears on the "Tunes" page.
+
+    *   **Adding Images**:
+        *   Place your image files in `posts/images/`.
+        *   Reference them in your Markdown using relative paths: `![My Image](images/my-image.jpg)`.
+        *   The build script automatically copies the `posts/images` directory to `dist/images`.
 
 2.  **Build the Site**: Run the build script.
 

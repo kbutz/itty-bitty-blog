@@ -224,6 +224,11 @@ def build():
         shutil.rmtree(DIST_DIR)
     os.makedirs(DIST_DIR)
 
+    # Copy Images
+    images_src = os.path.join(POSTS_DIR, 'images')
+    if os.path.exists(images_src):
+        shutil.copytree(images_src, os.path.join(DIST_DIR, 'images'))
+
     # Read Layout
     try:
         with open(os.path.join(TEMPLATES_DIR, 'layout.html'), 'r') as f:
@@ -298,6 +303,7 @@ def build():
 
     blog_posts = [p for p in posts if p.get('type') == 'blog']
     book_posts = [p for p in posts if p.get('type') == 'book']
+    tune_posts = [p for p in posts if p.get('type') == 'tune']
 
     index_list_items = []
     for post in blog_posts:
@@ -369,6 +375,27 @@ def build():
     books_html = layout_template.substitute(books_context)
     with open(os.path.join(DIST_DIR, 'books.html'), 'w') as f:
         f.write(books_html)
+
+    # Generate Tunes Page
+    tune_list_items = []
+    for post in tune_posts:
+        item = f'<li><span>{post["date"]}</span> <div style="flex-grow:1"><a href="{post["slug"]}">{post["title"]}</a></div></li>'
+        tune_list_items.append(item)
+
+    tunes_content = '<h1>Tunes</h1>\n<ul class="post-list">\n' + '\n'.join(tune_list_items) + '\n</ul>'
+
+    tunes_context = {
+        'title': "Tunes",
+        'site_title': SITE_TITLE,
+        'author_name': AUTHOR_NAME,
+        'year': datetime.now().year,
+        'content': tunes_content,
+        'about_section': ''
+    }
+
+    tunes_html = layout_template.substitute(tunes_context)
+    with open(os.path.join(DIST_DIR, 'tunes.html'), 'w') as f:
+        f.write(tunes_html)
 
     # Generate RSS Feed
     generate_rss(posts)
