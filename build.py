@@ -254,6 +254,14 @@ def build():
             # Post Metadata
             title = meta.get('title', 'Untitled')
             date_str = meta.get('date', datetime.now().strftime('%Y-%m-%d'))
+
+            # Normalize date string (e.g. 2026-2-1 -> 2026-02-01) for correct sorting
+            try:
+                dt = datetime.strptime(date_str, '%Y-%m-%d')
+                date_str = dt.strftime('%Y-%m-%d')
+            except ValueError:
+                pass
+
             category = meta.get('category', 'Uncategorized')
             post_type = meta.get('type', 'blog')
             tags_str = meta.get('tags', '')

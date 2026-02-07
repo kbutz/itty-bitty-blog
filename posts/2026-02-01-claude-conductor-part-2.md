@@ -1,6 +1,6 @@
 ---
 title: "Claude Conductor Part 2: Multi-Agent Support, Round-Robin Selection, and Production Hardening"
-date: 2026-02-1
+date: 2026-02-01
 category: Engineering
 tags: [ai, claude-code, multi-agent, python, engineering, orchestration]
 ---
