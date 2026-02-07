@@ -11,4 +11,6 @@ This section is dedicated to sharing the fiddle tunes and Balkan songs I've been
 
 One key technical improvement that came with this feature is the ability to include images in posts. This was essential for sharing music notation and bowings. Now, the build system automatically copies any images found in `posts/images/` to the distribution folder, allowing them to be easily referenced in Markdown.
 
+![Success Kid](images/success-kid.jpg)
+
 Stay tuned for some music!
