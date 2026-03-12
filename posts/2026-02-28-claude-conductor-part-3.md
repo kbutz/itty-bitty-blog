@@ -5,7 +5,6 @@ category: Engineering
 tags: [ai, claude-code, multi-agent, python, engineering, orchestration, testing, planning]
 ---
 
-# Claude Conductor Part 3: Planning Mode, The Code Reviewer & The Integration Suite
 *February 2026*
 
 In [Part 2](2026-02-01-claude-conductor-part-2.html), we established the multi-agent foundation that allows Claude Conductor to utilize different models for different tasks. With that "worker layer" stabilized, we turned our attention to higher-level workflows and the plumbing required to keep them reliable.

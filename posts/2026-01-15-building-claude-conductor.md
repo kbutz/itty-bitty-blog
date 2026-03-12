@@ -5,8 +5,6 @@ category: Engineering
 tags: [ai, claude-code, python, engineering, orchestration]
 ---
 
-# Building Claude Conductor: Orchestrating an AI Engineering Team
-
 *How I built a system to manage multiple AI coding agents working in parallel across our codebase*
 
 ---
