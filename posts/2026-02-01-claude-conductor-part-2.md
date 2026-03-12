@@ -5,8 +5,6 @@ category: Engineering
 tags: [ai, claude-code, multi-agent, python, engineering, orchestration]
 ---
 
-# Claude Conductor Part 2: Multi-Agent Support, Round-Robin Selection, and Production Hardening
-
 Following the initial release of Claude Conductor—our orchestration system for parallel AI agent execution—we've implemented significant architectural improvements based on real-world usage. This post covers the transition to a multi-agent system, the implementation of intelligent round-robin selection, and the local infrastructure required to support them.
 
 ## The Why: Operational Resilience
