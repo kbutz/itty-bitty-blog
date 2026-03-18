@@ -1,6 +1,6 @@
 ---
 title: "Building cloud-claude-conductor: Orchestrating AI Coding Agents in Kubernetes from Slack"
-date: 2025-03-02
+date: 2026-03-02
 category: Engineering
 tags: [ai, claude-code, go, engineering, orchestration]
 ---
