@@ -1,6 +1,6 @@
 ---
 title: "Claude Conductor Part 3: Planning Mode, The Code Reviewer & The Integration Suite"
-date: 2026-02-28
+date: 2026-02-06
 category: Engineering
 tags: [ai, claude-code, multi-agent, python, engineering, orchestration, testing, planning]
 ---
