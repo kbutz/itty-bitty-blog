@@ -2,6 +2,8 @@
 title: "Using Obsidian as a second brain with coding agents"
 date: 2026-04-19
 category: Engineering
+tags: [obsidian, ai, productivity, workflow]
+type: blog
 ---
 
 I've been experimenting with second-brain setups for a long time. The
