@@ -46,7 +46,7 @@ context on:
 ---
 status: active
 type: dev-project
-tags: [equifax, decisioning]
+tags: [credit, risk]
 created: 2026-03-17
 ---
 
@@ -77,7 +77,7 @@ machine and everything is there. The remote is also a free, offsite
 backup — if my laptop goes in a lake I lose nothing.
 
 In `git log` my own commits sit next to agent-written ones like
-`Auto-update: Equifax TWN status change`. If an agent gets a
+`Auto-update: Credit status change`. If an agent gets a
 frontmatter field wrong, I fix it in my editor and push, same as
 anything else.
 
@@ -106,7 +106,7 @@ just another reader.
 Writing happens in two flavors.
 
 For plain note-taking I use a short prompt that points the agent at
-the vault's own `CLAUDE.md` — which spells out where new topics go,
+the vault's own `CLAUDE.md` - which spells out where new topics go,
 how the Log is formatted, status values, that kind of thing. If I'm
 in the middle of something and want to drop a note without
 context-switching, I describe it and let the agent file it correctly,
