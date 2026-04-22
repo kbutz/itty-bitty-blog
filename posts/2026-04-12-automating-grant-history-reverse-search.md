@@ -6,6 +6,8 @@ tags: [python, nonprofits, grants, automation, 990, irs]
 type: blog
 ---
 
+**GitHub Repository:** [kbutz/fundingtrace](https://github.com/kbutz/fundingtrace)
+
 If you've ever tried to reconstruct a nonprofit's grant history from public records, you know the IRS Form 990 is both a goldmine and a dumpster fire. While an organization's own 990 shows their total revenue, the donor names in Schedule B are redacted from public view. To find out who actually gave them money, you have to "reverse-search" the filings of *other* organizations—private foundations (990-PF) and public charities (990 Schedule I)—to see where your target org appears as a recipient.
 
 Doing this manually involves searching ProPublica’s Nonprofit Explorer, opening a dozen PDFs, hitting Ctrl+F for an EIN, and copying values into a spreadsheet. It takes hours, it's error-prone, and it’s the kind of task that makes you wonder why we haven't automated the IRS into the sun yet.
