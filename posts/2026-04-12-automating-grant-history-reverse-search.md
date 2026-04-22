@@ -1,6 +1,6 @@
 ---
 title: "Automating the Grant History Reverse-Search"
-date: 2026-04-19
+date: 2026-04-12
 category: Engineering
 tags: [python, nonprofits, grants, automation, 990, irs]
 type: blog
