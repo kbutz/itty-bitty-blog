@@ -5,11 +5,11 @@ category: Engineering
 type: blog
 ---
 
-There's a particular kind of expensive read in any payments-shaped system. A user shows up at checkout, and to make a decision you need the answer to a question whose source of truth is spread across half a dozen tables — outstanding payments, processing payments, verification status, blocklist membership, fraud flags. Computing the answer live is correct but slow. Caching the answer in memory inside the pod gets you a 2% hit rate because there are a lot of pods and not very many of them see the same user twice in a row.
+There's a particular kind of expensive read in any payments-shaped system. A user shows up at checkout, and to make a decision you need the answer to a question whose source of truth is spread across half a dozen tables — outstanding payments, processing payments, verification status, blocklist membership, fraud flags. Computing the answer live is correct but slow. Simply caching at query time means you pay the latency cost once still, which in latency sensitive applications can be too much. Without a distributed cache, caching at query time also means low hit rate - the user needs to hit the exact same pod twice. In my experience, the built in MySQL cache is not effective for this problem, either.
 
-The fix that worked for me, three times in a row now in the same service, is a database-backed cache shared across all pods, kept fresh by a worker that polls a change source. Cache hit rate went from 2% to 95%+. Latency on the hot path went from 100–500ms to under 10ms. Staleness, in the worst case, sat around 5 seconds.
+The fix that worked for me, three times in a row now in the same service, is a database-backed cache shared across all pods, kept fresh by a worker that polls a change source. Latency on the hot path went from 100–500ms to under 10ms. 
 
-When I wrote the first one I thought I was inventing something. I wasn't — it's the **transactional outbox** pattern wearing a hat. But the version I keep building has a property I haven't seen written down explicitly: the consumer doesn't care where its change events come from. It can poll the source table directly, tail an outbox, or — eventually — subscribe to a Kafka topic, and the rest of the system doesn't change. That swap-ability turns out to be the whole point.
+This is essentially the **transactional outbox** pattern, but not exactly. The version I keep building has a property I haven't seen written down explicitly: the consumer doesn't care where its change events come from. It can poll the source table directly, tail an outbox, or — eventually — subscribe to a Kafka topic, and the rest of the system doesn't change. That swap-ability turns out to be the whole point.
 
 ## The pieces
 
