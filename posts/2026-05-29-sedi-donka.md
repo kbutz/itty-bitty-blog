@@ -1,11 +1,11 @@
 ---
 title: Sedi Donka
-date: 2024-03-29
+date: 2026-05-29
 category: Bulgarian
 type: tune
 ---
 
-We added another new tune post for Friday, March 29th. Sedi Donka is a traditional Bulgarian tune with a complex rhythm and rich background.
+We added another new tune post for Friday, May 29th. Sedi Donka is a traditional Bulgarian tune with a complex rhythm and rich background.
 
 ## Origins and Background
 
