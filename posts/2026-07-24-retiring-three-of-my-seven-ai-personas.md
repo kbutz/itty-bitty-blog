@@ -48,7 +48,7 @@ Acceptance / Resolution. There was a registry of legal intents:
 `request_tech_analysis`, `request_task_breakdown`, `request_qa_plan`,
 `request_data_lake_review`, `escalate`, `blocked`, and a matching `*_complete` for
 each. On top of that sat a workflow called Team Review that ran Vera, then Rex,
-then Sage if Sage had anything pending, then Vera again to refresh her verdict.
+then Sage if Sage had anything pending, then Vera again to refresh their verdict.
 
 It worked. It also produced a system where answering one question of mine could
 require four agent launches.
@@ -58,8 +58,8 @@ require four agent launches.
 The thing I got wrong is that I treated a persona boundary as free. It isn't. It's
 a serialization boundary.
 
-When Vera decided a project needed technical analysis, she couldn't just do the
-analysis. She wrote an inbox file describing what she wanted. Later — a separate
+When Vera decided a project needed technical analysis, they couldn't just do the
+analysis. They wrote an inbox file describing what they wanted. Later — a separate
 process, a separate context window, a fresh prompt — Sage woke up, read that file,
 and tried to reconstruct enough of Vera's reasoning to act on it. Everything Vera
 knew that didn't make it into the Ask section was gone. Then Sage wrote
@@ -83,7 +83,7 @@ benefit that cost buys.
 a separate *question* — one Rex could ask while already holding the project in
 context. Rex's prompt grew a section on gates, blockers, and staleness detection.
 Vera's 639-line prompt and 747-line service went away. What was lost: an
-adversarial second opinion, since Rex now grades his own homework. I decided the
+adversarial second opinion, since Rex now grades their own homework. I decided the
 lossy handoff cost more than the independence bought, and I'd rather have the
 disagreement come from me.
 
@@ -131,7 +131,7 @@ the persona can find my actual words later. The buttons in the UI pre-fill the
 anchor, so in practice I click Answer and type the body.
 
 The lesson I keep relearning: if a task is deterministic, don't put a language
-model on it. Maya wasn't reasoning, she was parsing. The rewrite is faster,
+model on it. Maya wasn't reasoning, they were parsing. The rewrite is faster,
 free, and can't hallucinate a recipient.
 
 ## The bug that survived two reviews
