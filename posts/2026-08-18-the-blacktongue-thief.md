@@ -9,7 +9,7 @@ book_author: Christopher Buehlman
 **SPOILERS BELOW**
 
 Plot Summary:
-Kinch Na Shannack owes a massive debt to the Takers Guild. He lies in wait to rob a traveler who turns out to be Galva, a deadly knight of the Goddess of Death and a veteran of the Goblin Wars. Instead of killing him, she spares him, and Kinch is ordered by his guild to accompany her on a treacherous journey to the giant-controlled city of Oslon. Along the way, they are joined by a powerful witch named Norrigal, her blind cat familiar Bully Boy, and a mercenary named Malk, navigating a world filled with kraken, goblins, and dark magic.
+Kinch Na Shannack owes a massive debt to the Takers Guild. He lies in wait to rob a traveler who turns out to be Galva, a deadly knight of the Goddess of Death and a veteran of the Goblin Wars. Instead of killing him, she spares him, and Kinch is ordered by his guild to accompany her on a treacherous journey. Along the way, they are joined by a powerful witch named Norrigal, her blind cat familiar Bully Boy, and a mercenary named Malk, navigating a world filled with kraken, goblins, and dark magic.
 
 Character Summary:
 * **Kinch Na Shannack**: A magically trained thief and our sarcastic narrator, heavily in debt to the Takers Guild.
@@ -18,11 +18,12 @@ Character Summary:
 * **Malk**: A mercenary who joins their perilous journey.
 * **Bully Boy**: A blind, magic-sensitive cat familiar.
 
-Major Moments:
-* **The Ambush**: Kinch's ill-fated attempt to rob Galva sets their unlikely partnership in motion.
-* **The Kraken Attack**: A harrowing encounter at sea that showcases the sheer danger of their world.
-* **Goblin Encounters**: Brutal clashes with the horrifying and cunning goblins that plague the lands.
-* **The Giants' Toll**: The climactic events in Oslon involving the formidable giants.
+Timeline:
+* **Chapter 1-5 (The Ambush)**: Kinch Na Shannack introduces himself and his debts to the Takers Guild. He attempts to rob Galva along the old forest road, which fails, leading to their reluctant partnership.
+* **Chapter 6-15 (The Journey Begins)**: Kinch and Galva begin their journey. Kinch is ordered by the Guild to accompany her. They meet Norrigal, Bully Boy, and Malk.
+* **Chapter 16-25 (The Kraken)**: The group travels by sea and faces a deadly attack by a kraken, forcing them to use all their skills and magic to survive.
+* **Chapter 26-35 (Goblin Territory)**: The party travels through treacherous lands and engages in brutal encounters with cunning and terrifying goblins.
+* **Chapter 36-End (Resolution)**: The surviving members of the party reach their destination, confronting the consequences of their journey and the secrets they've kept from each other.
 
 Books to Read Next:
 * **The Lies of Locke Lamora** by Scott Lynch
