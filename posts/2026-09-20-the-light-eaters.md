@@ -117,14 +117,6 @@ The conclusion is an invitation, not a solved proof of consciousness. The strong
 | Susan Dudley / sea rocket | Root growth differs with kin versus strangers | Context-dependent response, not proof of altruism |
 | Sonia Sultan / plant plasticity | Development depends on genotype and environmental history | Not all environmental effects are heritable |
 
-## Questions worth revisiting
-
-1. Which uses of *intelligence* are operational definitions, and which are metaphors?
-2. What would count as convincing evidence of plant learning rather than sensitization, fatigue, or priming?
-3. What experiment could distinguish chemical detection from visual explanations for *Boquila* mimicry?
-4. How do we separate signals that evolved to benefit a recipient from cues a recipient exploits?
-5. Can plant ethics change based on ecological interdependence alone, without a claim of sentience?
-
 ## Sources and further checking
 
 These are starting points for checking the science, not a claim that every detail above was independently checked against the book's notes. The book itself includes a substantial notes section (first edition, pp. 265–280).
