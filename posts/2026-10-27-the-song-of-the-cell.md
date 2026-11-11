@@ -1,6 +1,6 @@
 ---
 title: "The Song of the Cell"
-date: 2026-10-27
+date: 2026-10-30
 type: book
 book_author: Siddhartha Mukherjee
 ---
@@ -9,7 +9,7 @@ book_author: Siddhartha Mukherjee
 
 *The Song of the Cell: An Exploration of Medicine and the New Human* (2022) tells the history of biology and medicine through the cell: how people discovered it, learned to distinguish its many types, and began to treat disease by altering or replacing cellular behavior.
 
-**Reading date:** Approximately October 27, 2026, based on recollection; audiobook listening history has not been verified.
+**Reading date:** October 30, 2026 (confirmed by reader).
 
 These are detailed recall notes organized by the book's six parts and chapter subjects, not a transcription or a claim to have checked every passage against the full text. Where an experiment or therapy is still developing, that uncertainty matters.
 
