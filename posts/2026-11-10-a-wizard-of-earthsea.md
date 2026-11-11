@@ -64,6 +64,22 @@ Ged creates the shadow through pride and tries to escape it through fear. The re
 
 Vetch's friendship is not based on competition or prestige. His willingness to accompany Ged makes the last voyage possible, while Ogion's example provides the intellectual and moral counterweight to Ged's early ambition.
 
+## Memorable Lines
+
+> “To hear, one must be silent.”
+
+Ogion's lesson in attentiveness: understanding the world begins with patience, not the urge to demonstrate power.
+
+> “To light a candle is to cast a shadow.”
+
+A compact statement of Earthsea's equilibrium. Even seemingly beneficial magic has consequences, and light cannot simply be separated from darkness.
+
+> “I am whole, I am free.”
+
+Ged's words after confronting the shadow turn the climax away from defeating an opponent and toward accepting the self he had feared.
+
+These are brief excerpts rather than a comprehensive quotation collection; the surrounding scenes and ideas are summarized above.
+
 ## Recommended Next Reading
 
 - **The Tombs of Atuan — Ursula K. Le Guin:** The next Earthsea novel, shifting perspective to Tenar and exploring captivity, identity, and freedom.
