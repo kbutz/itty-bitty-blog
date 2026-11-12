@@ -64,21 +64,34 @@ Ged creates the shadow through pride and tries to escape it through fear. The re
 
 Vetch's friendship is not based on competition or prestige. His willingness to accompany Ged makes the last voyage possible, while Ogion's example provides the intellectual and moral counterweight to Ged's early ambition.
 
-## Memorable Lines
+## Memorable Lines: Light, Darkness, and Wholeness
+
+The novel opens with lines from **“The Creation of Éa”**:
+
+> “Only in silence the word,  
+> only in dark the light,”
+
+The poem also links life and death and concludes with an image of a hawk in the empty sky. It introduces the idea that apparently opposing things are bound together, rather than simply enemies.
+
+Earlier in the story, when **Serret** tempts Ged with the Stone of Terrenon, she insists:
+
+> “Only darkness can defeat the dark.”
+
+Ged answers:
+
+> “It is light that defeats the dark.”
+
+The exchange captures Ged's refusal to rely on the stone's sinister power. Yet the ending complicates a simple victory-of-light-over-darkness interpretation: Ged cannot overcome his shadow merely by attacking or denying it. He must recognize it as part of himself.
+
+Two other brief lines capture the same progression:
 
 > “To hear, one must be silent.”
 
-Ogion's lesson in attentiveness: understanding the world begins with patience, not the urge to demonstrate power.
-
-> “To light a candle is to cast a shadow.”
-
-A compact statement of Earthsea's equilibrium. Even seemingly beneficial magic has consequences, and light cannot simply be separated from darkness.
+Ogion's teaching emphasizes listening and restraint before action.
 
 > “I am whole, I am free.”
 
-Ged's words after confronting the shadow turn the climax away from defeating an opponent and toward accepting the self he had feared.
-
-These are brief excerpts rather than a comprehensive quotation collection; the surrounding scenes and ideas are summarized above.
+After facing the shadow, Ged's triumph is expressed as integration and freedom rather than the destruction of an external enemy. The final encounter fulfills the opening poem's insistence that darkness and light belong to a larger whole.
 
 ## Recommended Next Reading
 
